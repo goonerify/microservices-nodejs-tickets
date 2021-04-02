@@ -7,8 +7,12 @@ const start = async () => {
     throw new Error("JWT_KEY must be defined");
   }
 
+  if (!process.env.MONGO_URI) {
+    throw new Error("MONGO_URI must be defined");
+  }
+
   try {
-    await mongoose.connect("mongodb://tickets-mongo-srv:27017/tickets", {
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
@@ -19,7 +23,7 @@ const start = async () => {
   }
 
   app.listen(3000, () => {
-    console.log("Tickets listening on port 3000!");
+    console.log("Tickets service listening on port 3000!");
   });
 };
 
