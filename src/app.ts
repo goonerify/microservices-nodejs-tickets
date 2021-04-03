@@ -4,7 +4,7 @@ import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import { createTicketRouter } from "./routes/new";
 
-import { errorHandler, NotFoundError } from "@oldledger/common";
+import { errorHandler, NotFoundError, currentUser } from "@oldledger/common";
 
 const app = express();
 app.set("trust proxy", true); // Make express aware that traffic is being proxied to this service by ingress nginx/istio, and configure express to trust that proxy
@@ -15,6 +15,8 @@ app.use(
     // secure: process.env.NODE_ENV !== 'test' // NOTE: Disable security
   })
 );
+
+app.use(currentUser);
 
 app.use(createTicketRouter);
 
