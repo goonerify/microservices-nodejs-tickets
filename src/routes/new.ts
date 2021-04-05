@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import { requireAuth, validateRequest } from "@oldledger/common";
 import { Ticket } from "../models/ticket";
 import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.post(
 
     await ticket.save();
 
-    const publisher = new TicketCreatedPublisher(client).publish({
+    new TicketCreatedPublisher(natsWrapper.client).publish({
       // This service is failing because client is undefined
       id: ticket.id,
       title: ticket.title,
