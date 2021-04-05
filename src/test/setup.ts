@@ -1,9 +1,6 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import request from "supertest";
 import jwt from "jsonwebtoken";
-
-import { app } from "../app";
 
 declare global {
   namespace NodeJS {
@@ -12,6 +9,10 @@ declare global {
     }
   }
 }
+
+// Redirect all imports for the NATS streaming server client
+// to our mock implementation of the same file name
+jest.mock("../nats-wrapper.ts");
 
 let mongo: any;
 
@@ -28,6 +29,10 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  // Reset mock data to prevent polluting data in one test with data from a previous one
+  // because the mock function internally records how many times it gets called, different
+  // arguments that it's provided etc.
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {
