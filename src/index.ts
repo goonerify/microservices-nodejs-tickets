@@ -18,6 +18,16 @@ const start = async () => {
       "uhgf7uyfg8yu", // Ensure you're not duplicating this value or you might encounter errors
       "http://nats-srv:4222"
     );
+
+    natsWrapper.client.on("close", () => {
+      console.log("NATS connection closed!");
+      process.exit(); // exit process entirely when we lose the connection to nats
+    });
+
+    // exit process entirely when the connection is interrupted
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
+
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
