@@ -28,6 +28,7 @@ router.post(
     await ticket.save();
 
     const publisher = new TicketCreatedPublisher(client).publish({
+      // This service is failing because client is undefined
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
