@@ -18,6 +18,12 @@ interface TicketDoc extends mongoose.Document {
   // We use the orderId as both a flag to prevent editing a ticket that
   // has been reserved, and also as a means to locate the order to provide
   // more information about the order status to the seller of the ticket
+
+  // Note: Instead of reaching out to the order service with the orderId,
+  // we could create a new endpoint to make a request to the order service
+  // with the ticketId instead, which is already available in the orders database
+  // ticket field and can be used to facilitate a search for the appropriate
+  // order to return its status to the client
   orderId?: string;
 }
 
