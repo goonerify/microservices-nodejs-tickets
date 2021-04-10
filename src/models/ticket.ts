@@ -15,6 +15,9 @@ interface TicketDoc extends mongoose.Document {
   price: number;
   userId: string;
   version: number;
+  // We use the orderId as both a flag to prevent editing a ticket that
+  // has been reserved, and also as a means to locate the order to provide
+  // more information about the order status to the seller of the ticket
   orderId?: string;
 }
 
