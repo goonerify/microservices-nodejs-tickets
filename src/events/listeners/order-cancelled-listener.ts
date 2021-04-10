@@ -12,7 +12,9 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     const ticket = await Ticket.findById(data.ticket.id);
 
     if (!ticket) {
-      throw new Error("Ticket not found");
+      console.log("Ticket not found");
+      return;
+      // throw new Error("Ticket not found");
     }
 
     // Reset the value of orderId to free up this ticket for future orders

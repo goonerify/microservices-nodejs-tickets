@@ -68,5 +68,6 @@ it("publishes a ticket updated event", async () => {
     (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
   );
 
+  // Verify the publish function was called with the proper order id on the ticket
   expect(data.id).toEqual(ticketUpdatedData.orderId);
 });
