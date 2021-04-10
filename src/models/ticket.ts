@@ -15,6 +15,7 @@ interface TicketDoc extends mongoose.Document {
   price: number;
   userId: string;
   version: number;
+  orderId?: string;
 }
 
 // A class that provides an interface to the database for reading,
@@ -37,6 +38,11 @@ const ticketSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+    },
+    orderId: {
+      // not required because there's no associated orderId
+      // the first time a ticket is created
+      type: String,
     },
   },
   {
