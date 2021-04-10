@@ -5,10 +5,12 @@ import {
   NotFoundError,
   requireAuth,
   NotAuthorizedError,
+  BadRequestError,
 } from "@oldledger/common";
 import { Ticket } from "../models/ticket";
 import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publisher";
 import { natsWrapper } from "../nats-wrapper";
+import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
 
 const router = express.Router();
 
@@ -29,6 +31,10 @@ router.put(
       throw new NotFoundError();
     }
 
+    if (ticket.orderId) {
+      throw new BadRequestError("Cannot edit a reserved ticket");
+    }
+
     if (ticket.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
     }
@@ -36,6 +42,7 @@ router.put(
     ticket.set({
       title: req.body.title,
       price: req.body.price,
+      orderId: req.body.orderId,
     });
 
     await ticket.save();
@@ -45,6 +52,7 @@ router.put(
       price: ticket.price,
       userId: ticket.userId,
       version: ticket.version,
+      orderId: ticket.orderId,
     });
 
     res.send(ticket);
