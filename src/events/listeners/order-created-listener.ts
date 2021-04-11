@@ -14,8 +14,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 
     // If no ticket, throw error
     if (!ticket) {
-      console.log(`Ticket with id '${data.ticket.id}' not found`);
-      return;
+      return console.log(`Ticket with id '${data.ticket.id}' not found`);
     }
 
     // Mark the ticket as being reserved by setting its orderId property
